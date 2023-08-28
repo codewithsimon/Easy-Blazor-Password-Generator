@@ -1,0 +1,58 @@
+@using System.Text
+
+<h1>Password Generator</h1>
+
+<div>
+    <label>Password Length:</label>
+    <input type="number" @bind="passwordLength" min="4" max="32" />
+</div>
+<div>
+    <label>Include Uppercase:</label>
+    <input type="checkbox" @bind="includeUppercase" />
+</div>
+<div>
+    <label>Include Numbers:</label>
+    <input type="checkbox" @bind="includeNumbers" />
+</div>
+<div>
+    <label>Include Special Characters:</label>
+    <input type="checkbox" @bind="includeSpecialChars" />
+</div>
+
+<button @onclick="GeneratePassword">Generate Password</button>
+
+<div>
+    <h2>Generated Password:</h2>
+    <p>@generatedPassword</p>
+</div>
+
+@code {
+    private int passwordLength = 12;
+    private bool includeUppercase = true;
+    private bool includeNumbers = true;
+    private bool includeSpecialChars = false;
+    private string generatedPassword = "";
+
+    private static string UppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static string LowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+    private static string NumberChars = "0123456789";
+    private static string SpecialChars = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+    private void GeneratePassword()
+    {
+        string chars = LowercaseChars;
+        if (includeUppercase) chars += UppercaseChars;
+        if (includeNumbers) chars += NumberChars;
+        if (includeSpecialChars) chars += SpecialChars;
+
+        StringBuilder passwordBuilder = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < passwordLength; i++)
+        {
+            int index = random.Next(chars.Length);
+            passwordBuilder.Append(chars[index]);
+        }
+
+        generatedPassword = passwordBuilder.ToString();
+    }
+}
